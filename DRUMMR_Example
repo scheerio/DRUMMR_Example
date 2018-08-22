@@ -1,0 +1,71 @@
+//
+//  DRUMMRExample.swift
+//  DRUMMR
+//
+//  Created by Ben Scheer on 8/4/16.
+//  Copyright © 2016 Benjamin Scheer. All rights reserved.
+//
+
+import UIKit
+import AVFoundation
+import MediaPlayer
+
+/**
+ This is an example DRUMMR view controller, where the user would play and control sound.
+**/
+class DRUMMRExample: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    //Set up the audio player
+    var audioPlayer = AVAudioPlayer()
+    @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var stopbutton: UIButton!
+    @IBAction func play(_ sender: AnyObject) {
+        
+        // Set the sound file name & extension
+        let alertSound = URL(fileURLWithPath: Bundle.main.path(forResource: "34alt1", ofType: "m4r")!)
+        do {
+        // Preparation
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+        } catch _ {}
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch _ {}
+        // Play the sound
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: alertSound)
+        } catch _{}
+        
+        //set labels and rates
+        slider.isHidden = false
+        label.isHidden = false
+        stopbutton.isHidden = false
+        audioPlayer.enableRate = true
+        audioPlayer.rate = slider.value
+        audioPlayer.numberOfLoops = -1;
+        audioPlayer.prepareToPlay()
+        audioPlayer.play()
+    }
+    
+    @IBAction func slider(_ sender: UISlider) {
+        
+        //This changes the rate or speed the audio should be played at
+        audioPlayer.rate = slider.value
+        let tempo = Int(slider.value * 96)
+        label.text = "BPM:" + " " + "\(tempo)"
+    }
+    
+    @IBAction func stop(_ sender: AnyObject) {
+            audioPlayer.stop()
+    }
+}
