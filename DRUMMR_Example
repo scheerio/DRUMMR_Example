@@ -57,8 +57,7 @@ class DRUMMRExample: UIViewController {
         audioPlayer.play()
     }
     
-    @IBAction func slider(_ sender: UISlider) {
-        
+    @IBAction func slider(_ sender: UISlider) { 
         //This changes the rate or speed the audio should be played at
         audioPlayer.rate = slider.value
         let tempo = Int(slider.value * 96)
